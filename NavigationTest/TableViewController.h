@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TableViewController.h
 //  NavigationTest
 //
 //  Created by user on 15/8/4.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface TableViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
 @end
-
