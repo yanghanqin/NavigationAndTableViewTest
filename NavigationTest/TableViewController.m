@@ -19,6 +19,9 @@
     
     NSMutableArray *dataArr;
     
+    NSInteger rowOfAddButton;//用于存储添加按钮所在的cell的row的值
+    CGFloat heightOfAddCell;//用于存储存放添加按钮所在的cell的高度
+    
     
 }
 
@@ -26,6 +29,8 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
+    
+    
     dataArr=[[NSMutableArray alloc]initWithObjects:@"aaa",@"bbb",@"ccc", nil];
     
     navigationBar=[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
@@ -55,6 +60,11 @@
     myTableView.delegate=self;
     myTableView.dataSource=self;
     [self.view addSubview:myTableView];
+    
+    heightOfAddCell=44;
+    
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:TRUE];//隐藏状态栏
 }
 -(void)clickLeftButton
 {
@@ -62,7 +72,9 @@
     //[self showDialog:@"点击了导航栏左边按钮"];
     
 }
-
+-(bool)prefersStatusBarHidden{
+    return YES;
+}
 
 -(void)clickRightButton
 {
@@ -76,19 +88,37 @@
 }
 
 -(NSInteger )tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return dataArr.count;
+    rowOfAddButton =dataArr.count;
+    
+    return dataArr.count+1;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 132;
+    if (indexPath.row==rowOfAddButton) {
+        return heightOfAddCell;
+    }else{
+        return 132;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     
     UITableViewCell *cell=[[UITableViewCell alloc]init];
 //    UITableViewCell *cell=[[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 132)];
     
     
-    
+    if (indexPath.row==rowOfAddButton) {
+        UIButton *testButton=[[UIButton alloc]initWithFrame:CGRectMake(20, 2, tableView.frame.size.width-40, 40)];
+        [testButton setTitle:@"添加" forState:UIControlStateNormal];
+        [testButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        
+//        [cell setBackgroundColor:[UIColor blackColor]];
+        [testButton addTarget:self action:@selector(testButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [testButton setBackgroundColor:[UIColor whiteColor]];
+        [cell setBackgroundColor:[UIColor blueColor]];
+        [cell addSubview:testButton];
+        
+    }else{
     //用于添加边框的view
     UIView *viewForContain=[[UIView alloc]initWithFrame:CGRectMake(4, 2, tableView.frame.size.width-8, 132-4)];
     [viewForContain.layer setBorderColor:[UIColor blackColor].CGColor];
@@ -113,6 +143,7 @@
     [viewForContain addSubview:lable3];
 
     [cell addSubview:viewForContain];
+    }
 //    [cell addSubview:lable1];
 //    [cell addSubview:lable2];
 //    [cell addSubview:lable3];
@@ -123,7 +154,13 @@
     
     return cell;
 }
-
+-(void)testButtonAction:(id)sender{
+    UIButton *senderButton=(UIButton *)sender;
+//    [senderButton setBackgroundColor:[UIColor blackColor]];
+    UITableViewCell *cellFromButton=(UITableViewCell *)[senderButton superview];
+    [cellFromButton setFrame:CGRectMake(cellFromButton.frame.origin.x, cellFromButton.frame.origin.y, cellFromButton.frame.size.width, cellFromButton.frame.size.height+44)];
+    [cellFromButton setBackgroundColor:[UIColor redColor]];
+}
 /*
 #pragma mark - Navigation
 

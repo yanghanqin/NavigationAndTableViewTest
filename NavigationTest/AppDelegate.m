@@ -25,6 +25,8 @@
     
     TableViewController *rootVC=[[TableViewController alloc]init];
     self.window.rootViewController =rootVC;
+    
+    
     return YES;
 }
 
